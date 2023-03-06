@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "parserOptions": { "sourceType": "script", "ecmaVersion": 2020 },
+  "env": { "node": true, "jest": true },
+  "plugins": ["eslint-plugin"],
+  "extends": ["eslint:recommended", "plugin:eslint-plugin/recommended"],
+  "rules": {}
+}
