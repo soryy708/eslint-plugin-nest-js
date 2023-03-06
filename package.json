@@ -2,6 +2,13 @@
   "main": "src/index",
   "author": "Ivan Rubinson",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soryy708/eslint-plugin-nest-js"
+  },
+  "bugs": {
+    "url": "https://github.com/soryy708/eslint-plugin-nest-js/issues"
+  },
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
