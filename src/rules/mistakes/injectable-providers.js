@@ -36,7 +36,7 @@ module.exports = {
               (dclass) => dclass.id.name === provider.name
             );
             if (
-              !(declaredClass.decorators ?? []).some(
+              !(declaredClass?.decorators ?? []).some(
                 (decorator) => decorator.expression.callee.name === 'Injectable'
               )
             ) {
