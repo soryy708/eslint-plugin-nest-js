@@ -1,3 +1,4 @@
+const nestInjectable = require('../../entities/nest-injectable');
 const nestModule = require('../../entities/nest-module');
 
 module.exports = {
@@ -11,12 +12,8 @@ module.exports = {
       },
     },
     create: function (context) {
-      const declaredClasses = [];
       return {
         ClassDeclaration: function (node) {
-          declaredClasses.push(node);
-        },
-        'ClassDeclaration:exit': function (node) {
           const moduleDecorator = nestModule.getModuleDecorator(node);
           if (!moduleDecorator) {
             return;
@@ -32,14 +29,8 @@ module.exports = {
           const imports = importsProperty?.value.elements ?? [];
 
           imports.forEach((imported) => {
-            const declaredClass = declaredClasses.find(
-              (dclass) => dclass.id.name === imported.name
-            );
-            if (
-              (declaredClass?.decorators ?? []).some(
-                (decorator) => decorator.expression.callee.name === 'Injectable'
-              )
-            ) {
+            const importedNode = context.getScope().upper.set.get(imported.name)?.defs[0]?.node;
+            if (importedNode && nestInjectable.isInjectable(importedNode)) {
               context.report({
                 message: 'Imported is an `@Injectable`',
                 node: imported,

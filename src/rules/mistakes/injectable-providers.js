@@ -1,3 +1,4 @@
+const nestInjectable = require('../../entities/nest-injectable');
 const nestModule = require('../../entities/nest-module');
 
 module.exports = {
@@ -11,12 +12,8 @@ module.exports = {
       },
     },
     create: function (context) {
-      const declaredClasses = [];
       return {
         ClassDeclaration: function (node) {
-          declaredClasses.push(node);
-        },
-        'ClassDeclaration:exit': function (node) {
           const moduleDecorator = nestModule.getModuleDecorator(node);
           if (!moduleDecorator) {
             return;
@@ -32,14 +29,8 @@ module.exports = {
           const providers = providersProperty?.value.elements ?? [];
 
           providers.forEach((provider) => {
-            const declaredClass = declaredClasses.find(
-              (dclass) => dclass.id.name === provider.name
-            );
-            if (
-              !(declaredClass?.decorators ?? []).some(
-                (decorator) => decorator.expression.callee.name === 'Injectable'
-              )
-            ) {
+            const providerNode = context.getScope().upper.set.get(provider.name)?.defs[0]?.node;
+            if (providerNode && !nestInjectable.isInjectable(providerNode)) {
               context.report({
                 message: 'Provider is not `@Injectable`',
                 node: provider,
