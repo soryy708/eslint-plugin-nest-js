@@ -29,7 +29,8 @@ module.exports = {
           const providers = providersProperty?.value.elements ?? [];
 
           providers.forEach((provider) => {
-            const providerNode = context.getScope().upper.set.get(provider.name)?.defs[0]?.node;
+            const providerNode = context.getScope().upper.set.get(provider.name)
+              ?.defs[0]?.node;
             if (providerNode && !nestInjectable.isInjectable(providerNode)) {
               context.report({
                 message: 'Provider is not `@Injectable`',

@@ -29,7 +29,8 @@ module.exports = {
           const imports = importsProperty?.value.elements ?? [];
 
           imports.forEach((imported) => {
-            const importedNode = context.getScope().upper.set.get(imported.name)?.defs[0]?.node;
+            const importedNode = context.getScope().upper.set.get(imported.name)
+              ?.defs[0]?.node;
             if (importedNode && nestInjectable.isInjectable(importedNode)) {
               context.report({
                 message: 'Imported is an `@Injectable`',
