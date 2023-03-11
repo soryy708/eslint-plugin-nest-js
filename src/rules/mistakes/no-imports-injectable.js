@@ -1,5 +1,6 @@
 const nestInjectable = require('../../entities/nest-injectable');
 const nestModule = require('../../entities/nest-module');
+const imported = require('../../entities/imported');
 
 module.exports = {
   'no-imports-injectable': {
@@ -28,13 +29,18 @@ module.exports = {
           );
           const imports = importsProperty?.value.elements ?? [];
 
-          imports.forEach((imported) => {
-            const importedNode = context.getScope().upper.set.get(imported.name)
+          imports.forEach((imp) => {
+            const declaration = context.getScope().upper.set.get(imp.name)
               ?.defs[0]?.node;
+            const importedNode = imported.resolveImportedDeclaration(
+              declaration,
+              context
+            );
+
             if (importedNode && nestInjectable.isInjectable(importedNode)) {
               context.report({
                 message: 'Imported is an `@Injectable`',
-                node: imported,
+                node: imp,
               });
             }
           });

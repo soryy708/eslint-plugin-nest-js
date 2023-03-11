@@ -1,5 +1,6 @@
 const nestInjectable = require('../../entities/nest-injectable');
 const nestModule = require('../../entities/nest-module');
+const imported = require('../../entities/imported');
 
 module.exports = {
   'injectable-providers': {
@@ -29,8 +30,13 @@ module.exports = {
           const providers = providersProperty?.value.elements ?? [];
 
           providers.forEach((provider) => {
-            const providerNode = context.getScope().upper.set.get(provider.name)
+            const declaration = context.getScope().upper.set.get(provider.name)
               ?.defs[0]?.node;
+            const providerNode = imported.resolveImportedDeclaration(
+              declaration,
+              context
+            );
+
             if (providerNode && !nestInjectable.isInjectable(providerNode)) {
               context.report({
                 message: 'Provider is not `@Injectable`',
