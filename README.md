@@ -29,6 +29,8 @@ Please don't use Experimental rules. They're works in progress, and are guarante
   > Don't use forwardRef, because it smells like circular dependencies.
 - `no-multi-export`
   > Don't export more than one provider, because it violates the Interface Segregation Principle.
+- `max-providers`
+  > Don't give a module many providers, because it smells like a god object, which violates the Single Responsibility Principle.
 
 #### Experimental:
 
